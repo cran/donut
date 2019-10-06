@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Paul Northrop" />
+
+<meta name="date" content="2019-10-03" />
+
+<title>An overview of donut</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">An overview of donut</h1>
+<h4 class="author">Paul Northrop</h4>
+<h4 class="date">2019-10-03</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#nearest-neighbour-search-with-variables-on-a-torus">Nearest Neighbour Search with Variables on a Torus</a><ul>
+<li><a href="#an-example">An example</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="nearest-neighbour-search-with-variables-on-a-torus" class="section level2">
+<h2>Nearest Neighbour Search with Variables on a Torus</h2>
+<p>A non-parametric method for classification or regression involves making inferences locally using the <span class="math inline">\(k\)</span> observations closest to a point of interest, based on some metric, such as L2 or L1. There are several R packages, such as <strong>RANN</strong> <span class="citation">(Arya et al. 2019)</span> <strong>RANN.L1</strong> <span class="citation">(Arya et al. 2018)</span> and <strong>nabor</strong> <span class="citation">(Elseberg et al. 2012)</span>, that find <span class="math inline">\(k\)</span> nearest neighbours. The <strong>donut</strong> package considers the situation where one or more of the variables in the dataset is periodic on a finite interval. For example, direction is periodic on the interval <span class="math inline">\((0, 360)\)</span> degrees. In the small dataset <span class="math inline">\(\{10, 90, 350\}\)</span> degrees 350 is closer to 10 than is 90: 10 and 350 are separated by 20 degrees, 10 and 90 by 80 degrees.</p>
+<p>The function <code>nnt()</code> finds the <span class="math inline">\(k\)</span> nearest neighbours of each of a set of points of interest, wrapping periodic variables on a torus so that this periodicity is reflected. The user chooses the function to use to find the nearest neighbours. The nearest neighbour functions from the aforementioned packages are used as examples.</p>
+<div id="an-example" class="section level3">
+<h3>An example</h3>
+<p>We use a simple 2-dimensional example from the <code>RANN::nn2()</code> documentation. For the purposes of illustrating <code>nnt()</code> we will suppose that one of more of the variables in periodic. In one or two dimensions the plot method associated with <code>nnt()</code> can be used to show the effect of taking this periodicity into account.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(donut)
+<span class="kw">set.seed</span>(<span class="dv">20092019</span>)
+x1 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi)
+x2 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">3</span>)
+DATA &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x1, x2)</code></pre></div>
+<p>First, we suppose that only <code>x1</code> should be wrapped, on the range <span class="math inline">\((0, 2\pi)\)</span>. We use a small number of query points of interest, chosen to illustrate the wrapping. By default <code>RANN::nn2()</code>, which uses the L2 metric, is used to find the nearest neighbours. In the plot, query points are indicated with colour-coded crosses and the 8 nearest neighbours of each point are shaded in the same colour. The wrapping of the variable <code>x1</code> is apparent.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RANN)
+ranges1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi)
+query1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="fl">1.3</span>), <span class="kw">c</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi, <span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="fl">1.5</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">0</span>))
+res1 &lt;-<span class="st"> </span><span class="kw">nnt</span>(DATA, query1, <span class="dt">k =</span> <span class="dv">8</span>, <span class="dt">torus =</span> <span class="dv">1</span>, <span class="dt">ranges =</span> ranges1)
+<span class="kw">plot</span>(res1, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))</code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAMAAAByRC0tAAAA2FBMVEUAAAAAADoAAGYAAP8AOpAAOv8AZrYAZv8AzQAAzWYA1ZAA3rYA//86AAA6ADo6AGY6Ojo6OpA6kNs6kP8659s6//9mAABmADpmAP9mOpBmZmZmZv9mtttmtv9mzQBmzTpm3mZm7v9m//+QOgCQOmaQOv+QZgCQ1QCQ2/+Q9/+Q//+2ZgC2Zv+23gC2/7a2///bkDrbkP/b2//b5zrb/9vb////AAD/ADr/AGb/OgD/OpD/ZgD/Zmb/Zrb/kDr/kNv/tmb/tv//25D/2///7mb//7b//9v////KC5QFAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAQ3ElEQVR4nO2dDXvbthVGmdhL3c7ptrT1uo92a7wsWdQ26oe9tN1S1auk//+PJoqiLEsECfC9F7gA39M+flyXAkDy8OKCIKFqTQhAlboBJG8oEIGgQASCAhEICkQgKBCBoEAEggIRCApEICgQgaBABIICEQgKRCAoEIGgQASCAhEICkQgKBCBoEAEggIRCApEICgQgaBABIICEQgKRCAoEIGgQASCAhEICkQgKBCBoEAEggIRCApEICgQgaBABIICEQgKRCAoEIGgQASCAhEICkQgKBCBoEAEggIRCApEICgQgaBABIICEQgKRCAoEIGgQASCAhEICkQgKBCBoEAEggIRCApEICgQgaBABIICEQgKRCAoEIGgQASCAhEICkQgKBCBoEAEggIRCApEICgQgaBABIICEQgKRCAoEIGgQAQiTKDVdbXl8Rul5pDcCBJoXj1rflm0v5CpEyLQ6nqvzfz8prs4UggaAi2vPmt/XTg6MaZUhaAikE8ECiiOGEZFoE0OtAtBzhyIAhWCjkCbTqzpIB3xhwIVg5JAsYvTJSBVLJnv3n+zXn7+8cM/UqBhqnVe7T1AVP3Vy4/X331w1KdoCzTPfxRWHfx8+D8iB6bw+oTV//X9r//2r44qvNuCE377ID0ugWIHpvD6nOqP5auL33bX4d0YMfIXSPzsjGuG8Ef6+fXii+46vBsjhh2BhqNh96U/QYFWL//+/nFGoinQoqoevZIrTgefjqHTsQwEku5lv/vg+5dHgzAtgWZV9ezuDzeHkxpIcXoAGtjPgYTz/OXnX2zy6KMQpCPQ7PxmPdtGH+tTGUgcsT8Kk+WrzRB+9fIojdabTL37sBbI+mRq7I4oAnE9UxKongFbfbu2H4FyvkvYTeQdUppMbeNOoxJanCqpOwZh0uT2khtumTfDr0XlyKENCSRKehsLESh2cUYw0B9SoIwxkZEXkQNFL84GJgTCutGLi4vA2sQ3TFLcWGRzFhsCIVxchBo0bYGkw72BHAji4iLYoIwECo6uno0QNSj5KAyiaIHCo6tnI7I+5bKULNCIfRtoQRstKNA9BedA0gJt05XccxZxwg/xVAXaBZ/McxZpRhzibAQK3LkhM9h7dTDmIs1GoEB/hqqgQB2ULFC4Px4G0Z+HFCxQ4K75xBemP6eUmwMpCEQ6CB+mlClQYAfFYORF5wnIRKDg4BriRB7pUHLLu09BLgIpzIS15NHfJbfc0QlkI5AeWQgU2EiFcEWBXBQokEa4yk0gvS7rhOS9gwdBAulcEnnlQAoPb7hJnp96EGK5Uky1MArzXR9I/OENPWLZF7wkc6RmiW8oUlw+Aon1f5IiRuyUKRAGerHvtZE95/E6ZaMC6eVAwocWFGivTRZDwS6sCqQ1CpMO7tiJv/80BdKqV6NaaYOgAGRBIOBqpUBwkUCfeNCclDejkHyBAiXlQJt0N6OgEcvEBDJ319nCPUwKFFSxgTMmhszOUCDPKktSZ4tUOGUO5Ftjf625GSaX0HEU5lthX7XW0qNBTIwIKJD3BuYiFAWKCS4QEKGU1OttUSTdpyNQfTyHerC+LYDrXa1z7JEkVoc8FYGq4Uty4JAfCWT08ZzodU5EIK/j2e/EwyJCLnAKFLRhkuL8qsMqPXQmqLywymVyFwo0sljH0Rc5ngeFBzqhtG2Mcnzqkd0wSXEHpboNEqwzUEj/qCIXOSY9Cht5Z7Tv6Cs8iShQ4EmrTNzbCUFJoNV18+6F49vCBoobOzcT8+iLCHmqIQXaMq923/K0qEZ83dPo2eHcjn5Xe2PlLlKoCLS63msz5gvnfATqDgCZHf1O4a1NmAygItDBV+2O+cpLD4FcpuR19HOLmF1YjEDDOVAJR74ms4jZhVYOtAtBo3Kg4VGYsEDp4lZ4zdZirNIobHnVjMIc8UfiprCcQDnFAXNttXkfyOvjkv4YOytO7LU1U4EkI7m9k+LGXlu1BZqPGIVFxt5JcWOvrZEjkO/6QFExl1f0YK6tuXZhotjyuR9rbaVABEJJoPnmQtneCsogByIISjcSH71aL6+erClQ8ShOZayuz28oUOmoTqbOzm+mJtDZ2VnqJsRFdzJ19mRiAp2dTc0gpRxop83yyvVMYpkCnZ1ZNEh15K82Cms6sdV1eoEi3jkxKZDuvcfy7wPFvHdrUSDl2Y/iBYo7e2TPHwoE1HG/nkLMTixWVZ5QIKSKyuD8dWyk+vDb21tH6d7NEET/jLbmmJu/jo7MKOL2ttOg8gUyN3+dJ7e33QZNQCAiwfQEyqzvMvaQ3QkTFCirvms7YDTd3MnlQFnRuGPeoI6/UiAT5CBQNxTIRE9HgdTqVceZa0cVy34O5GDyAjlH+yMHcWPnMqyPwlxQoO2P05N3LJanGGlmUxPKFyzQ4PsWwvVq086YHTfoSCBPMdI8z5HydnuoQMPvWwjXq05rT3X85/XBH33FSCJQtVMobq33lYds6PG+hXC9+uwu3q4Q9DAAqQoEhJBqH0YTECiQx/sWwvVGwJFHH55SbzFG+9PVAu/P5iOQx/sWwvXGwOPseYrxTb3Zpx+NagFgUNX2Y/EJzoEG37cQrjcKHv2HZ2B58dH6m9+4lmXracDBzxEMfpeVHiNGYQPvWwjXmxm/nL359FX4x+BnT7IZhaHVWVwfSJQvz94b87G8nj05IFyg1bdR682NX84+G96og1yvqXCBmrtAG5H+odWFdT83kAkv/nI2+rjkKNGILmxRPXpV50JaOZDjyaU82GTQL8IHYfdZcHYGjcmBmq/icawgDtfrenYyDz79rM6jQz+1VQdOpJMwKomuDRrX03vUm7VAX9ZD+BfvBX6qOvmZD2MEmlXVX6/di9CD9WYt0DimJdDyatt7LZRyoAn606ozkRxo+acm9OiMwqbozz59nsgoTLXeaQqUpToN+QmU77HOindvN53N7c+D21kTaPAuUJaJQoasfvh5/e7H4e3MCTRwHzrPoUqOLN4u//2/4c3sCeTzObgxQv2gveWkDkD38afb//rU4ltcUQIJ9YMGF7S7B97Hxe0vntV4YUQgkXMvFMYsLqm5B97H1Q//eetdj+SG2sUJ9D4UyIN3P9Z5tGc9HpgRyL8Kp2mxBUryruHBzzEsNx3YwiMElStQX18XNwdK9Lbqevw+bkbCP/1Y92LDaXSxAvVfgTFHYal6uvH7GDIZMFGBYmI6VdrxQJig6SQKpEotjmWBdp48FMaCQM1Di5X7kY+0OVAsGnNU/BHphHeiHBljQKB5+8DrwvXka9JRWCza2KPhz1rgGLamHBuTPAfavwC9Ucnx4GLqcxsFvc5LpoN2CRTyXoyKQO0SDBsW6b8vLB25CIS8CMMIpIla9iw0RNhHnvHP8GnlQLsQlDIHsoDa6EtoiIA//6k0ClteNaMw56sbExGoRqkT6xsieI8f8CeIi70PZIY0a955HmAKZB7xRPry8nJgi4AEyb5AE/ve+FOkBbq8HDQoJMO2mgM5Syl+faBjhAW6vBw2KGiIhr5DxS5MG4UA5BOCYh1gCqSOdAY0LFDMWRwKlBk+/uzpFEnWLgqUGyH+rDsOtHD/pjQXdp8sT30UlpDOZNo3w/ZNrnUi0PAawBRIH0Qg7+G92gNlTySLI2MABPK/waiVAy0G1sCjQBEYnwOlFyhycdMgIH9uGD0Ko0AlEjSCB0mdA8UuzgDqc+599xDlzUo7CoteXHr0n9roEQiKTdiNRQokQ4SXv9wC9c9vDAgC3likQDLEeHuwPwC5BBoQxGtY3+MgBZIhyuunPRmQU6AhQXwE6nOQAgmR9PXlgQAECtS7CQWSIunr7z0Z0HroAfy1TwCiQJOl2v3j3mBoFEaBpk0FfwkHc6BJE/SItKMIjsImjIBAg6VLbihd3ITe4FBC+BnE08JlN1SolwZhaF6D1gXSjb8EhgIRCApEIKwLxBzIOOYFMjIKs9EKTUbuoX2BfAtUPcPlx8Gxe1iKQN37L2VV+ZnY6D0sRKDu/ReLGxRo4IOSG/aXAq4P5Ppg5/7LnXYKNPBByQ01i3OGFGWBmAP1fk52Q8Xieozo2n/JuMFRmOtj4hsqFtdnRNf+lx830lOMQN0fKD5uJCcrgRhS7JGXQAwp5shMIBINz2uVApFOfG/tUyDShfetfVMCMcMxw1aV49PRZZUlgTjGOiLeelInVM2/XbKYFaj8CadAYq5IdkJVtRYd/O3g58O/+RQo0are4ijQQ1/8vtVAja4XWm3nQJMX6MiX1AId/Lz/o+lRWPIcKG0SfyxMYoE8T4clgVKPwhILfCJMWn88T4cpgdKSugs9jThp/fGDAu1JLVDyiDMKCrQnuUBhEceIbBTonuRJfAhWwhUFOiCjqZTUQ7Q9SgKtrnu/bs6oQCLEOa2FCzSvnjW/LNpfoOJyItJ5LVug1fVem/n5DVxcTsifWI2vxxBERaDl1f7b5hYT+85UcYH6vt9ArpbxMALJIi2Qma7KhVYOtAtBzIEkirM8oaE0Cmu/+NsRfwoWSLhrSS7Q0M0x3gcyx83lJm18/snuvwz403u2KJA9Xn+ykWgfuhN3YAc/ezbwLimY+cRGYSJcvnn+OnUbdiQX6LgUcH2gafDG0LCLOVCOXD5P3YJ70ozCYhdXFq+fX7rmEM3ByVR7bDLo158Mb2YDTqba4/nzOo9O3QpPOJVhjjf1EP61nTS6H06mEghGIAKRbDKVFIKKQMOTqWD5WkWwGcJFKBWmU345Z85IMyhQkjLKaQYFSlJGOc2gQEnKKKcZFChJGeU0gwIlKaOcZlCgJGWU0wwKlKSMcpqRlUCkcCgQgaBABIICEQgKRCAoEIGgQASCAhEICkQgKBCBoEAEggIRCApEIFQFWlTVo1doIXe/A18H3r7Q73gNyZe5xJ6s1zP/11m6aF6KeQI14e4pWsJDNAVabI75Aj3uyyvnSg5+rK43TZhjB61eTwvek/qCwgS6+xBvwqYFyytBgxQFal5knWGNXfQsBeLH3dP6bUjXkmpeLK+e1buDHvZNAMEEcr1Q7k9zTqCDcYSiQAJnrn4FFj9q24Lg+IELND//JybQHI4cAjHsCE2Bto2Fz7+MQDO4lDmq4OZ4gDnQ7PdoNrd4/PUVnBA+QFGg5qKHL30RgZwv8/sXgJZQ9x6YQMur+uMzpB3zOiHAY+kB0xBoITDwWF2D/c/m42AE2gIdjyaMygT1hkl0YXD8aUqBLoXt0ZAQqEktR9JkpFARRxhPotcSAs1lOn3ssM93y6bApw7Kg5uDKZlKWx/GCwg0h09ao45AKMQikEAzmkXmMunCZG4kwnt79xSPP/WJP1ifDSoH+Xh9MUJJ9DYTk9iTPapTGSITAKhAu74Da8hMovPBcyCBZizweZ0HcDKVQFAgAkGBCAQFIhAUiEBQIAJBgQgEBSIQFIhAUCACQYEIBAUiEBSIQFAgAkGBCAQFIhAUiEBQIAJBgQgEBSIQFIhAUCACQYEIBAUiEBSIQFAgAkGBCAQFGgW89nAxUKAxwGsPlwMFGgG+9nA5UCB/6sXW6iWjxdYeLgEK5E+9MNO8WeGHArVQoAAWj7/+46vdbxSogQKFMGuXC6ZALRQohEW7wBwFaqFAAayu/7wThwK1UKAA5uff7xY4pUAtFMifepHlnTkUqIUC+dOsFr1NoylQCwUiEBSIQFAgAkGBCAQFIhAUiEBQIAJBgQgEBSIQFIhAUCACQYEIBAUiEBSIQFAgAkGBCAQFIhAUiEBQIAJBgQgEBSIQFIhAUCACQYEIxP8BUqdQ2VvhawAAAAAASUVORK5CYII=" /><!-- --></p>
+<p>The object returned from <code>nnt()</code> is a list including the same components that are returned from <code>RANN::nn()</code>, <code>RANN::nn2()</code> and <code>nabor::knn()</code>, that is, matrices containing the nearest neighbour distances (<code>nn.dists</code>) and the corresponding indices in <code>data</code> (<code>nn.idx</code>). The <span class="math inline">\(i\)</span>th row relates to the <span class="math inline">\(i\)</span>th query point, the <span class="math inline">\(i\)</span>th row of <code>query</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1<span class="op">$</span>nn.dists
+<span class="co">#&gt;            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]</span>
+<span class="co">#&gt; [1,] 0.15704522 0.3501943 0.4310847 0.4397544 0.4685137 0.4767617</span>
+<span class="co">#&gt; [2,] 0.43932258 0.5283214 0.5716203 0.5815153 0.5939273 0.6234609</span>
+<span class="co">#&gt; [3,] 0.08775281 0.3553781 0.3918241 0.4196264 0.4209570 0.5525234</span>
+<span class="co">#&gt; [4,] 0.19200301 0.2799162 0.3053224 0.5576230 0.8803338 1.0122411</span>
+<span class="co">#&gt;           [,7]      [,8]</span>
+<span class="co">#&gt; [1,] 0.4819253 0.4993756</span>
+<span class="co">#&gt; [2,] 0.8834840 0.8933141</span>
+<span class="co">#&gt; [3,] 0.6148038 0.7221735</span>
+<span class="co">#&gt; [4,] 1.0694339 1.0731836</span>
+res1<span class="op">$</span>nn.idx
+<span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span>
+<span class="co">#&gt; [1,]   54   18    8   27   19   30   31   28</span>
+<span class="co">#&gt; [2,]   63   82   74   58   81   45   42   88</span>
+<span class="co">#&gt; [3,]   25   37    6   41   89    7   80   33</span>
+<span class="co">#&gt; [4,]   93   87   52   12   29   85    1   40</span></code></pre></div>
+<p>Now we suppose that both variables should be wrapped, on the ranges <span class="math inline">\((0, 2\pi)\)</span> and <span class="math inline">\((0, 3)\)</span> respectively. The points shaded in green illustrate the effect of wrapping in both variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ranges &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))
+query &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="fl">1.3</span>), <span class="kw">c</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi, <span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="fl">1.5</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">0</span>))
+res2 &lt;-<span class="st"> </span><span class="kw">nnt</span>(DATA, query, <span class="dt">k =</span> <span class="dv">8</span>, <span class="dt">torus =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">ranges =</span> ranges)
+<span class="kw">plot</span>(res2)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The argument <code>fn</code> can be used to choose the function that finds nearest neighbour distances. Possibilities are <code>nabor::knn()</code> (L2 metric) and <code>RANN.L1:nn2()</code> (L1 metric). Any function can be used provided that it has syntax consistent with a call <code>fn(data = data, query = query, k = k, ...)</code>. The following code produce the same output as <code>fn = RANN::nn2()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nabor)
+ranges &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))
+query &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="fl">1.3</span>), <span class="kw">c</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi, <span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="fl">1.5</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">0</span>))
+res2 &lt;-<span class="st"> </span><span class="kw">nnt</span>(DATA, query, <span class="dt">k =</span> <span class="dv">8</span>, <span class="dt">fn =</span> nabor<span class="op">::</span>knn, <span class="dt">torus =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">ranges =</span> ranges)
+<span class="kw">plot</span>(res2)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({  "HTML-CSS": { minScaleAdjust: 125, availableFonts: [] }  });
+</script>
+<div id="refs" class="references">
+<div id="ref-RANN">
+<p>Arya, Sunil, David Mount, Samuel E. Kemp, and Gregory Jefferis. 2019. <em>RANN: Fast Nearest Neighbour Search (Wraps Ann Library) Using L2 Metric</em>. <a href="https://CRAN.R-project.org/package=RANN" class="uri">https://CRAN.R-project.org/package=RANN</a>.</p>
+</div>
+<div id="ref-RANN.L1">
+<p>Arya, Sunil, David Mount, Samuel E. Kemp, Gregory Jefferis, and Kirill Müller. 2018. <em>RANN.L1: Fast Nearest Neighbour Search (Wraps Ann Library) Using L1 Metric</em>. <a href="https://CRAN.R-project.org/package=RANN.L1" class="uri">https://CRAN.R-project.org/package=RANN.L1</a>.</p>
+</div>
+<div id="ref-nabor">
+<p>Elseberg, J., S. Magnenat, R. Siegwart, and A. Nüchter. 2012. “Comparison of Nearest-Neighbor-Search Strategies and Implementations for Efficient Shape Registration.” <em>Journal of Software Engineering for Robotics (JOSER)</em> 3 (1): 2–12. <a href="https://CRAN.R-project.org/package=nabor" class="uri">https://CRAN.R-project.org/package=nabor</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
