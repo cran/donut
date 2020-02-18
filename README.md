@@ -3,14 +3,14 @@
 donut
 =====
 
-[![Travis-CI Build Status](https://travis-ci.org/paulnorthrop/donut.svg?branch=master)](https://travis-ci.org/paulnorthrop/donut) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/paulnorthrop/donut?branch=master&svg=true)](https://ci.appveyor.com/project/paulnorthrop/donut) [![Coverage Status](https://codecov.io/github/paulnorthrop/donut/coverage.svg?branch=master)](https://codecov.io/github/paulnorthrop/donut?branch=master)
+[![Travis-CI Build Status](https://travis-ci.org/paulnorthrop/donut.svg?branch=master)](https://travis-ci.org/paulnorthrop/donut) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/paulnorthrop/donut?branch=master&svg=true)](https://ci.appveyor.com/project/paulnorthrop/donut) [![Coverage Status](https://codecov.io/github/paulnorthrop/donut/coverage.svg?branch=master)](https://codecov.io/github/paulnorthrop/donut?branch=master) [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/donut)](https://cran.r-project.org/package=donut)
 
 Nearest Neighbour Search with Variables on a Torus
 --------------------------------------------------
 
 ### What does donut do?
 
-There are several R packages, such as [RANN](https://cran.r-project.org/package=RANN), [RANN.L1](https://cran.r-project.org/package=RANN.L1) and [nabor](https://cran.r-project.org/package=nabor) that find the *k* nearest neighbours in a dataset of specified query points, based on some metric, such as L2 or L1. The donut package considers the situation where one or more of the variables in the dataset is periodic on a finite interval. For example, direction is periodic on the interval (0, 360) degrees. In the small dataset {10, 90, 350} degrees 350 is closer to 10 than is 90: 10 and 350 are separated by 20 degrees, 10 and 90 by 80 degrees.
+There are several R packages, such as [RANN](https://cran.r-project.org/package=RANN) and [nabor](https://cran.r-project.org/package=nabor) that find the *k* nearest neighbours in a dataset of specified query points, based on some metric, such as L2 or L1. The donut package considers the situation where one or more of the variables in the dataset is periodic on a finite interval. For example, direction is periodic on the interval (0, 360) degrees. In the small dataset {10, 90, 350} degrees 350 is closer to 10 than is 90: 10 and 350 are separated by 20 degrees, 10 and 90 by 80 degrees.
 
 The function `nnt()` finds the *k* nearest neighbours of each of a set of points of interest, wrapping periodic variables on a torus so that this periodicity is reflected. The user chooses the function to use to find the nearest neighbours. The nearest neighbour functions from the aforementioned packages are used as examples.
 
